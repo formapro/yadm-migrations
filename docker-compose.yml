@@ -1,0 +1,16 @@
+version: '2'
+services:
+  yadm:
+    image: formapro/nginx-php-fpm:latest-all-exts
+    working_dir: /yadm
+    depends_on:
+      - mongo
+    volumes:
+      - ./:/yadm
+    environment:
+      - MONGODB_URI=mongodb://mongo/
+
+  mongo:
+    image: mongo:3
+    ports:
+      - "27017:27017"

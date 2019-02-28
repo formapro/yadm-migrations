@@ -1,0 +1,36 @@
+{
+  "name": "formapro/yadm-migrations",
+  "type": "library",
+  "description": "The YADM migrations",
+  "keywords": ["model", "mongodb", "odm", "storage", "migration"],
+  "license": "MIT",
+  "require": {
+    "php": "^7.1",
+    "formapro/yadm": "^0.5",
+    "symfony/console": "~3.3|^4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~6.0"
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-4": { "Formapro\\Yadm\\Migration\\": "src" }
+  },
+  "autoload-dev": {
+    "psr-4": { "Formapro\\Yadm\\Migration\\Tests\\": "tests" }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.5-dev"
+    }
+  },
+  "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/formapro/yadm.git"
+    }
+  ]
+}

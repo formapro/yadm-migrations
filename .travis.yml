@@ -1,0 +1,23 @@
+language: php
+
+php:
+  - 7.0
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+  - mongodb
+
+before_install:
+    - echo "extension = mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+install:
+    - composer install
+
+notifications:
+  email:
+    - payumsupport@forma-pro.com
