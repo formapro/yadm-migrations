@@ -9,6 +9,7 @@ use Formapro\Yadm\Migration\ExecutedMigrationsStorage;
 use Formapro\Yadm\Migration\MigrationFactory;
 use Formapro\Yadm\Migration\MigrationFile;
 use Formapro\Yadm\Migration\MigrationFileFinder;
+use Formapro\Yadm\Registry;
 
 class MigrateService
 {
@@ -27,14 +28,21 @@ class MigrateService
      */
     private $migrationFactory;
 
+    /**
+     * @var Registry
+     */
+    private $yadm;
+
     public function __construct(
         MigrationFileFinder $migrationFileFinder,
         ExecutedMigrationsStorage $executedMigrationsStorage,
-        MigrationFactory $migrationFactory
+        MigrationFactory $migrationFactory,
+        Registry $yadm
     ) {
         $this->migrationFileFinder = $migrationFileFinder;
         $this->executedMigrationsStorage = $executedMigrationsStorage;
         $this->migrationFactory = $migrationFactory;
+        $this->yadm = $yadm;
     }
 
     public function migrate(Context $context)
@@ -66,7 +74,7 @@ class MigrateService
                 throw $e;
             }
 
-            $migration->execute();
+            $migration->execute($this->yadm);
 
             $this->executedMigrationsStorage->pushVersion($migrationFile->getVersion());
         }

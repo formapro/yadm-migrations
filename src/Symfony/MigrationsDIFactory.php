@@ -11,6 +11,7 @@ use Formapro\Yadm\Migration\MigrationFileFinder;
 use Formapro\Yadm\Migration\Service\GenerateService;
 use Formapro\Yadm\Migration\Service\MigrateService;
 use Formapro\Yadm\Migration\YadmExecutedMigrationsStorage;
+use Formapro\Yadm\Registry;
 use MongoDB\Collection;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -30,7 +31,7 @@ class MigrationsDIFactory
                 ->booleanNode('createDirIfNotExists')->defaultValue(true)->end()
                 ->scalarNode('classPrefix')->defaultValue('Migration')->cannotBeEmpty()->end()
                 ->scalarNode('namespace')->defaultValue('App\\YadmMigrations')->cannotBeEmpty()->end()
-                ->scalarNode('templateFile')->defaultValue(__DIR__.'/../../Migration.tmpl.php')->cannotBeEmpty()->end()
+                ->scalarNode('templateFile')->defaultValue(__DIR__ . '/../../Migration.php.tmpl')->cannotBeEmpty()->end()
                 ->scalarNode('database')->defaultNull()->end()
                 ->scalarNode('collection')->defaultValue('migrations')->cannotBeEmpty()->end()
             ->end()
@@ -49,7 +50,13 @@ class MigrationsDIFactory
         $container->setAlias(MigrationFileFinder::class, GenericMigrationFileFinder::class);
 
         $container->register(GenericMigrationFactory::class);
-        $container->setAlias(MigrationFactory::class, GenericMigrationFactory::class);
+
+        $container->register(SymfonyMigrationFactory::class)
+            ->addArgument(new Reference(GenericMigrationFactory::class))
+            ->addArgument(new Reference('service_container'))
+        ;
+
+        $container->setAlias(MigrationFactory::class, SymfonyMigrationFactory::class);
 
         $container->register('yadm.migrations.collection', Collection::class)
             ->setFactory([new Reference('yadm.collection_factory'), 'create'])
@@ -66,6 +73,7 @@ class MigrationsDIFactory
             ->addArgument(new Reference(MigrationFileFinder::class))
             ->addArgument(new Reference(ExecutedMigrationsStorage::class))
             ->addArgument(new Reference(MigrationFactory::class))
+            ->addArgument(new Reference(Registry::class))
         ;
 
         $container->register(GenerateService::class);
