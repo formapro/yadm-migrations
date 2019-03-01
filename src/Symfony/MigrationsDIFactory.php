@@ -25,13 +25,12 @@ class MigrationsDIFactory
         $builder = new ArrayNodeDefinition($name);
         $builder
             ->canBeEnabled()
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('dir')->defaultValue('%kernel.project_dir%/YadmMigrations')->cannotBeEmpty()->end()
                 ->booleanNode('createDirIfNotExists')->defaultValue(true)->end()
                 ->scalarNode('classPrefix')->defaultValue('Migration')->cannotBeEmpty()->end()
                 ->scalarNode('namespace')->defaultValue('App\\YadmMigrations')->cannotBeEmpty()->end()
-                ->scalarNode('templateFile')->defaultValue(__DIR__ . '/../../Migration.php.tmpl')->cannotBeEmpty()->end()
+                ->scalarNode('templateFile')->defaultValue(realpath(__DIR__ . '/../../Migration.php.tmpl'))->cannotBeEmpty()->end()
                 ->scalarNode('database')->defaultNull()->end()
                 ->scalarNode('collection')->defaultValue('migrations')->cannotBeEmpty()->end()
             ->end()
@@ -42,6 +41,10 @@ class MigrationsDIFactory
 
     public static function buildServices(array $config, ContainerBuilder $container): void
     {
+        if (false === $config['enabled']) {
+            return;
+        }
+
         $container->register(Context::class)
             ->addArgument($config)
         ;

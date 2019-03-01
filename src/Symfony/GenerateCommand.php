@@ -32,6 +32,11 @@ class GenerateCommand extends Command
         $this->generateService = $generateService;
     }
 
+    protected function configure()
+    {
+        $this->setDescription('Generate a blank migration class');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $file = $this->generateService->generate($this->defaultContext);
