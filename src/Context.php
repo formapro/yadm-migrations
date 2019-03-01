@@ -39,7 +39,7 @@ class Context
      */
     private $templateFile;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
         if (isset($config['dir'])) {
             $this->setDir($config['dir']);

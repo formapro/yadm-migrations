@@ -77,16 +77,17 @@ EOL;
         $tmpDir = sys_get_temp_dir().'/'.uniqid('yadm_');
         mkdir($tmpDir);
 
-        $content = <<<EOL
+        $content = <<<'EOL'
 <?php
 
 namespace App\Migrations;
 
 use Formapro\Yadm\Migration\Migration;
+use Formapro\Yadm\Registry;
 
 class {class} implements Migration {
 
-    public function execute() {}
+    public function execute(Registry $yadm): void {}
 }
 EOL;
 
