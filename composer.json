@@ -26,12 +26,5 @@
     "branch-alias": {
       "dev-master": "0.5-dev"
     }
-  },
-  "minimum-stability": "dev",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/formapro/yadm.git"
-    }
-  ]
+  }
 }
